@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<Student>
+    <h1>List of Students</h1>
+        <table border="1" cellpadding="6">
+            @for (int i = 0; i < Model.Count;i++ )
+            { 
+                <tr>
+                    <td>@Html.TextBox("customers[" + @i + "].CustomerID", 
+                                      Model[i].Name, 
+                                      new { @readonly = "readonly" })</td>
+                </tr>
+            }
+        </table>

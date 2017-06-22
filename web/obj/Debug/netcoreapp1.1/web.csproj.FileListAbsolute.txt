@@ -1,0 +1,8 @@
+C:\sai\dev\techblue\web\bin\Debug\netcoreapp1.1\web.deps.json
+C:\sai\dev\techblue\web\bin\Debug\netcoreapp1.1\web.runtimeconfig.json
+C:\sai\dev\techblue\web\bin\Debug\netcoreapp1.1\web.runtimeconfig.dev.json
+C:\sai\dev\techblue\web\bin\Debug\netcoreapp1.1\web.dll
+C:\sai\dev\techblue\web\bin\Debug\netcoreapp1.1\web.pdb
+C:\sai\dev\techblue\web\obj\Debug\netcoreapp1.1\web.AssemblyInfo.cs
+C:\sai\dev\techblue\web\obj\Debug\netcoreapp1.1\web.dll
+C:\sai\dev\techblue\web\obj\Debug\netcoreapp1.1\web.pdb
