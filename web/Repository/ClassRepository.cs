@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using web.Models;
 
 class ClassRepository : IClassRepository
 {
@@ -10,7 +11,7 @@ class ClassRepository : IClassRepository
     {
         
         var client = new HttpClient();
-        var jsonData = await client.GetStringAsync("https://basicjavaclass.azurewebsites.net/api/GetStudents");
+        var jsonData = await client.GetStringAsync("https://basicjavaclass.azurewebsites.net/api/students");
         return JsonConvert.DeserializeObject<List<Student>>(jsonData);        
     }
 }

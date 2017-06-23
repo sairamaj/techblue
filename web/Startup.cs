@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using web.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
 
 namespace web
 {
@@ -27,9 +31,27 @@ namespace web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddSingleton<IClassRepository, ClassRepository>();
+
+            services.Configure<AzureAdB2COptions>(Configuration.GetSection("Authentication:AzureAdB2C"));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             // Add framework services.
             services.AddMvc();
-            services.AddSingleton<IClassRepository,ClassRepository>();
+
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(1);
+                options.CookieHttpOnly = true;
+            });
+
+            services.AddAuthentication(
+                sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
+
+            services.AddSingleton<IConfigureOptions<OpenIdConnectOptions>, OpenIdConnectOptionsSetup>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +71,9 @@ namespace web
             }
 
             app.UseStaticFiles();
+            app.UseSession();
+            app.UseCookieAuthentication();
+            app.UseOpenIdConnectAuthentication();
 
             app.UseMvc(routes =>
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using web.Models;
 
 namespace web.Controllers
 {
@@ -16,12 +17,13 @@ namespace web.Controllers
         IClassRepository _classRepository;
         public IActionResult Index()
         {
-            var students = new ClassRepository().GetStudents().Result;
+           /* var students = new ClassRepository().GetStudents().Result;
             foreach(var student in students)
             {
                 System.Console.WriteLine(student.Name);
             }
-            return View(students);
+            */
+            return View(new List<Student>());
         }
 
         public IActionResult About()
