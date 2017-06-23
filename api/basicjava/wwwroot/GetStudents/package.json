@@ -1,0 +1,6 @@
+{
+    "dependencies": {
+        "azure-graphapi" :"0.1.0",
+        "bluebird" : "3.5.0"
+    }
+}
