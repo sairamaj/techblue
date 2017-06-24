@@ -2,16 +2,17 @@
     ViewData["Title"] = "Home Page";
 }
 
-@using web.Models;
-@model List<Student>
-    <h1>List of Students</h1>
-        <table border="1" cellpadding="6">
-            @for (int i = 0; i < Model.Count;i++ )
-            { 
-                <tr>
-                    <td>@Html.TextBox("customers[" + @i + "].CustomerID", 
-                                      Model[i].Name, 
-                                      new { @readonly = "readonly" })</td>
-                </tr>
-            }
-        </table>
+<br/>
+<br/>
+<h1>Welcome</h1>
+<p>
+    This site will is under development to help Students, Parents to view the progress of the classes. Click <a asp-area="" asp-controller="Session" asp-action="SignIn">
+        Sign in</a> and if you are first time visitor you will be registered in to the system.
+    We will be adding 
+        <li>Class Schedules</li>
+        <li>Home works</li>
+        <li>Quizes</li>
+        <li>Resources</li>
+</p>
+
+    

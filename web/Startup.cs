@@ -39,7 +39,7 @@ namespace web
 
             // Add framework services.
             services.AddMvc();
-
+            
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -51,7 +51,6 @@ namespace web
                 sharedOptions => sharedOptions.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme);
 
             services.AddSingleton<IConfigureOptions<OpenIdConnectOptions>, OpenIdConnectOptionsSetup>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
