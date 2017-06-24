@@ -28,14 +28,14 @@ namespace web.Controllers
 
         public IActionResult About()
         {
-            ViewData["Message"] = "";
+            ViewData["Message"] = "Your application description page.";
 
             return View();
         }
 
         public IActionResult Contact()
         {
-            ViewData["Message"] = "";
+            ViewData["Message"] = "Your contact page.";
 
             return View();
         }
