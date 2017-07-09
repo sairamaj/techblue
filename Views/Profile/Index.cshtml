@@ -1,0 +1,28 @@
+@model web.Models.Profile
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<br/><br/><br/><br/>
+<form asp-controller="Profile" asp-action="Update" method="post">
+    <table>
+        <col width="80"/>
+        <col width="600"/>
+        <tr><td>Name:</td>
+    <td ><input asp-for="Name" size="70" readonly="true" disabled="true"/></td>
+    </tr>
+    <tr>
+        <td>Email</td>
+        <td><input asp-for="Email" size="70" readonly="true" disabled="true"/></td>
+    </tr>
+    <tr>
+        <td>Git Url</td>
+    <td><input asp-for="GitUrl" size="70"/></td>
+    </tr>
+    
+    <tr>
+    <td></td>
+    <td><button type="submit">Update</button></td>
+    </tr>
+    </table>
+</form>

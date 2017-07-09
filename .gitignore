@@ -1,6 +1,7 @@
 bin
 obj
 lib
+wwwroot
 node_modules
 appsettings.json
 
