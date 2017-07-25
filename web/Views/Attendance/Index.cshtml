@@ -1,0 +1,24 @@
+<style>
+hr { 
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 3px;
+} 
+</style>
+
+@if( User.Identity.IsAuthenticated && AttendanceUtility.IsClassRunning)
+{
+<hr>
+    <font color='red'>If you are present in the class: </font>
+<form asp-controller="Attendance" asp-action="MarkAttendance" method="post">
+    <button type="submit">Click me to get Attendance for today</button>
+</form>  
+<br/><br/>
+<hr>
+}
+
+Previous attendance information will be displayed here

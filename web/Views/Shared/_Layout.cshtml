@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - web</title>
+    <title>@ViewData["Title"] Teaching for charity</title>
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -33,14 +33,22 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="ClassSession" asp-action="Index">Sessions</a></li>
+                    <li><a asp-area="" asp-controller="Profile" asp-action="Index">Profile</a></li>
+                    <li><a asp-area="" asp-controller="Attendance" asp-action="Index">Attendance</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
+                    @if (User.IsInRole("Administrators"))
+                    {
+                           <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>
+                    }
+                    </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </nav>
     <div class="container body-content">
+        <br/><br/><br/>
         @RenderBody()
         <hr />
         <footer>
@@ -71,4 +79,6 @@
 
     @RenderSection("Scripts", required: false)
 </body>
+
+
 </html>

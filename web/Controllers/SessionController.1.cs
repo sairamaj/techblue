@@ -31,6 +31,10 @@ namespace web.Controllers
         [HttpGet]
         public async Task EditProfile()
         {
+            // foreach(var claim in User.Claims)
+            // {
+            //     System.Console.WriteLine(claim.Type + "-->" + claim.Value);
+            // }
             var properties = new AuthenticationProperties() { RedirectUri = "/" };
             properties.Items[AzureAdB2COptions.PolicyAuthenticationProperty] = AzureAdB2COptions.EditProfilePolicyId;
             await HttpContext.Authentication.ChallengeAsync(

@@ -10,7 +10,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
 
 namespace web
 {
@@ -38,7 +40,9 @@ namespace web
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc()
+            .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new LowercaseContractResolver());
+             
 
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
@@ -82,5 +86,6 @@ namespace web
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+
     }
 }

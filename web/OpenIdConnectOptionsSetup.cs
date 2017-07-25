@@ -35,7 +35,8 @@ namespace web
             {
                 OnRedirectToIdentityProvider = OnRedirectToIdentityProvider,
                 OnRemoteFailure = OnRemoteFailure,
-                OnAuthorizationCodeReceived = OnAuthorizationCodeReceived
+                OnAuthorizationCodeReceived = OnAuthorizationCodeReceived,
+                OnTokenValidated = SecurityTokenValidated
             };
         }
 
@@ -84,6 +85,11 @@ namespace web
              // Extract the code from the response notification
             var code = context.ProtocolMessage.Code;
 
+            // foreach(var claim in context.Ticket.Principal.Claims)
+            // {
+            //     System.Console.WriteLine(claim.Type + "-->" + claim.Value);
+            // }
+
             string signedInUserID = context.Ticket.Principal.FindFirst(ClaimTypes.NameIdentifier).Value;
             TokenCache userTokenCache = new MSALSessionCache(signedInUserID, context.HttpContext).GetMsalCacheInstance();
             ConfidentialClientApplication cca = new ConfidentialClientApplication(AzureAdB2COptions.ClientId, AzureAdB2COptions.Authority, AzureAdB2COptions.RedirectUri, new ClientCredential(AzureAdB2COptions.ClientSecret), userTokenCache, null);
@@ -99,6 +105,23 @@ namespace web
                 //TODO: Handle
                 throw;
             }
+        }
+
+        private Task SecurityTokenValidated(TokenValidatedContext context)
+        {
+            // resource: https://stackoverflow.com/questions/40302231/authorize-by-group-in-azure-active-directory-b2c
+
+            Console.WriteLine("In SecurityTokenValidated....");
+            var oidClaim = context.SecurityToken.Claims.FirstOrDefault(c => c.Type == "oid");
+            System.Console.WriteLine("oidClaim is:" + oidClaim);
+            if( oidClaim.Value == "766e375f-360a-4945-904e-cb4aaac5d1e7")
+            {
+                // This is temporary. here we are going to query the Groups for this user and add accordingly.
+                ((ClaimsIdentity)context.Ticket.Principal.Identity).AddClaim(new Claim(ClaimTypes.Role, "Administrators", ClaimValueTypes.String));            
+            }
+            Console.WriteLine("Administrators claim has been added");
+
+            return Task.FromResult(0);
         }
     }
 }
