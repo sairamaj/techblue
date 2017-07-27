@@ -1,0 +1,12 @@
+@model IEnumerable<web.Models.Class>
+<br />
+<table>
+        @foreach(var cls in Model){
+            <tr>
+                <td><a href="~/Admin/AttendanceByDate?date=@cls.Date">@cls.Date</a></td>
+            </tr>
+        }
+
+</table>
+<br/>
+  <label font="bold">Total:<label>@Model.Count()

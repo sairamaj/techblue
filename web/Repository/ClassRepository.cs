@@ -97,7 +97,16 @@ class ClassRepository : IClassRepository
     }
     public async Task<IEnumerable<Attendence>> GetAttendance(System.DateTime dt)
     {
-        return null;
+        var client = new HttpClient();
+        var data = await client.GetStringAsync(AttendanceGetUrl + dt.ToString("MMddyy"));
+        var attendanceInfo =  JsonConvert.DeserializeObject<List<Attendence>>(data);
+        foreach(var attendance in attendanceInfo)
+        {
+            System.Console.WriteLine("... attendance:id:{0} - {1}" , attendance.Id, attendance.Name);
+            //System.Console.WriteLine("... attendance:name" + attendance.Data == null ? "na" : attendance.Data.Name);
+        }
+
+        return attendanceInfo;
     }
 
     public async Task<IEnumerable<Attendence>> GetAttendance(string id)
@@ -123,5 +132,12 @@ class ClassRepository : IClassRepository
         }
 
         return attendances;
+    }
+
+    public async Task<IEnumerable<Class>> GetClasses()
+    {
+        var client = new HttpClient();
+        var jsonData = await client.GetStringAsync(ClassesInfoUrl);
+        return JsonConvert.DeserializeObject<List<Class>>(jsonData);
     }
 }

@@ -1,0 +1,13 @@
+@model IEnumerable<web.Models.Student>
+
+<table>
+        @foreach(var student in Model.OrderBy(s=> s.Name)){
+            <tr>
+                <td>@student.Name</td>
+                <td>@student.Email</td>
+                <td><a href="@student.GitUrl">@student.GitUrl</td>
+            </tr>
+        }
+
+        <label font="bold">Total:<label>@Model.Count()
+</table>

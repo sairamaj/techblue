@@ -1,0 +1,11 @@
+@model IEnumerable<web.Models.Attendence>
+
+<table>
+        @foreach(var attendance in Model.OrderBy(s=> s.Name)){
+            <tr>
+                <td>@attendance.Name</td>
+            </tr>
+        }
+</table>
+
+<label font="bold">Total:<label>@Model.Count()
