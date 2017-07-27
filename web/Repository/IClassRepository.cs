@@ -10,5 +10,6 @@ public interface IClassRepository
     Task<bool> IsClassRunningToday();
 
     Task<IEnumerable<Attendence>> GetAttendance(System.DateTime dt);
+    Task<IEnumerable<Attendence>> GetAttendance(string id);
     Task<bool> CheckAttendanceExists(string id, System.DateTime dt);
 }

@@ -19,9 +19,20 @@ namespace web.Controllers
             _classRepository = classRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            return View(await GetCurrentAttendances());
+        }
+
+         
+        [HttpPost]
+        public async Task<IActionResult> MarkAttendanceLastSession(string date)
+        {
+            System.Console.WriteLine("..... In MarkAttendanceLastSession :" + date);
+            var id = GetClaimValue(ObjectIdentifier);
+            await _classRepository.UpdateAttendance(id, User.Identity.Name, DateTime.ParseExact(date,"MMddyy",null));
+
+            return View("Index", await GetCurrentAttendances());
         }
 
         [HttpPost]
@@ -36,6 +47,12 @@ namespace web.Controllers
             var id = GetClaimValue(ObjectIdentifier);
             await _classRepository.UpdateAttendance(id, User.Identity.Name, pacificNow);
             return View();
+        }
+
+        public bool DoesAttendanceExists(IEnumerable<Attendence> attendances, string date)
+        {
+            Console.WriteLine("In DoesAttendanceExists:" + date);
+            return true;
         }
 
         private string GetClaimValue(string claimType)
@@ -53,7 +70,16 @@ namespace web.Controllers
             return claim.Value;
         }
 
-    }
+        private async Task<IEnumerable<Attendence>> GetCurrentAttendances()
+        {
+            var id = GetClaimValue(ObjectIdentifier);
+            var attendances = await _classRepository.GetAttendance(id);
+            foreach(var attendance in attendances)
+            {
+                System.Console.WriteLine("AttendanceController.index {0} ",attendance.Date);
+            }
 
-    
+            return attendances;
+        }
+    } 
 }

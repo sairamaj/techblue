@@ -14,6 +14,7 @@ class ClassRepository : IClassRepository
     const string CreateAttendenceApiUrl = "https://basicjavaclass.azurewebsites.net/api/students/attendance/";
 
     const string ClassesInfoUrl = "https://basicjavaclass.azurewebsites.net/api/classes";
+    const string AttendanceGetUrl = "https://basicjavaclass.azurewebsites.net/api/attendance/";
     public async Task<IEnumerable<Student>> GetStudents()
     {
         var client = new HttpClient();
@@ -97,5 +98,30 @@ class ClassRepository : IClassRepository
     public async Task<IEnumerable<Attendence>> GetAttendance(System.DateTime dt)
     {
         return null;
+    }
+
+    public async Task<IEnumerable<Attendence>> GetAttendance(string id)
+    {
+        var client = new HttpClient();
+        var jsonData = await client.GetStringAsync(ClassesInfoUrl);
+        var classes =  JsonConvert.DeserializeObject<List<Class>>(jsonData);
+
+        List<Attendence> attendances = new List<Attendence>();
+        foreach(var cls in classes)
+        {
+            System.Console.WriteLine(cls.Date + "->" + cls.Status);
+            client = new HttpClient();
+            System.Console.WriteLine("Quering;:" + AttendanceGetUrl + cls.Date);
+            var data = await client.GetStringAsync(AttendanceGetUrl + cls.Date);
+            var attendanceInfo =  JsonConvert.DeserializeObject<List<Attendence>>(data);
+            var studentAttendanceInfo = attendanceInfo.FirstOrDefault( a => a.Id == id);
+            if( studentAttendanceInfo != null)
+            {
+                studentAttendanceInfo.Date = cls.Date;
+                attendances.Add(studentAttendanceInfo);
+            }
+        }
+
+        return attendances;
     }
 }

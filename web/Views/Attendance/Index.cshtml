@@ -17,8 +17,80 @@ hr {
 <form asp-controller="Attendance" asp-action="MarkAttendance" method="post">
     <button type="submit">Click me to get Attendance for today</button>
 </form>  
-<br/><br/>
+
 <hr>
 }
 
-Previous attendance information will be displayed here
+
+@model IEnumerable<web.Models.Attendence>
+
+
+<br/>
+<h4>
+    Attendance creation is made automatic now. From now onwards when you come to class and login to this site you will see button to mark your attendance. But for the past 3 sessions I need your help in clicking the buttons appropriately to indicate your attendance to sessions. 
+    Thank you
+</h4>
+
+<font color="red"><b>Note:</b></font> Sometimes you may get timeout error. Just try one more time
+<br/>
+
+<h3>Current Attendance</h3>
+<ul>
+    @if(Model != null )
+    {
+        @foreach (var attendance in Model)
+        {   
+            <b><li>@attendance.Date</li></b>
+        }
+    }
+</ul>
+
+<br/>
+@if(!AttendanceUtility.DoesAttendanceExists(Model, new string []{"062717","062817"}))
+{
+    <h4><font color="red">First Session</font></h4>
+    <form asp-controller="Attendance" asp-action="MarkAttendanceLastSession" method="post">
+        <input name="date" type="hidden" value="062717" />
+        <button type="submit">June 27th(Tue)</button>
+    </form>  
+
+
+    <br/>
+    <form asp-controller="Attendance" asp-action="MarkAttendanceLastSession" method="post">
+        <input name="date" type="hidden" value="062817" />
+        <button type="submit">June 28th(Tue)</button>
+    </form>  
+    <hr>
+    <br/><br/>
+}
+
+@if(!AttendanceUtility.DoesAttendanceExists(Model, new string []{"070517","070817"}))
+{
+    <h4><font color="red">Second Session</font></h4>
+    <form asp-controller="Attendance" asp-action="MarkAttendanceLastSession" method="post">
+        <input name="date" type="hidden" value="070517" />
+        <button type="submit">July5th(Wed)</button>
+    </form>
+    <br/>  
+    <form asp-controller="Attendance" asp-action="MarkAttendanceLastSession" method="post">
+        <input name="date" type="hidden" value="070817" />
+        <button type="submit">July 8th(Sat)</button>
+    </form>  
+    <hr>
+    <br/><br/>
+
+}
+
+@if(!AttendanceUtility.DoesAttendanceExists(Model, new string []{"071817","071917"}))
+{
+    <h4><font color="red">Third Session</font></h4>
+    <form asp-controller="Attendance" asp-action="MarkAttendanceLastSession" method="post">
+        <input name="date" type="hidden" value="071817" />
+        <button type="submit">July 18th(Tue)</button>
+    </form>
+    <br/>  
+    <form asp-controller="Attendance" asp-action="MarkAttendanceLastSession" method="post">
+        <input name="date" type="hidden" value="071917" />
+        <button type="submit">July 19th(Wed)</button>
+    </form>  
+}
