@@ -13,4 +13,5 @@ public interface IClassRepository
     Task<IEnumerable<Attendence>> GetAttendance(string id);
     Task<bool> CheckAttendanceExists(string id, System.DateTime dt);
     Task<IEnumerable<Class>> GetClasses();
+    Task<IEnumerable<Reward>> GetRewards(string id);
 }

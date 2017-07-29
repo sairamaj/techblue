@@ -1,0 +1,35 @@
+@model IEnumerable<web.Models.Reward>
+
+
+<center>
+<table border="1" cellpadding="10">
+        <col width="320"/>
+        <col width="200"/>
+
+    <tr>
+        <th>Task</th>
+        <th>Status</th>
+    </tr>
+    @foreach(var reward in Model)
+    {
+        <tr>
+        <td>
+            @reward.Description
+        </td>
+            <b>
+            @if( @reward.Status == "done"){
+                    <td><font color="green">@reward.Status</font></td>
+            }
+            else{
+                    <td><font color="red">@reward.Status</font></td>
+            } 
+            </b>
+        </tr>
+
+    }
+</table>
+
+<h4>
+<label font="bold" size="10">Total:<label>@Model.Where(m=> m.Status == "done").Count() rewards
+    </h4>
+</center>

@@ -15,6 +15,9 @@ class ClassRepository : IClassRepository
 
     const string ClassesInfoUrl = "https://basicjavaclass.azurewebsites.net/api/classes";
     const string AttendanceGetUrl = "https://basicjavaclass.azurewebsites.net/api/attendance/";
+    const string StudentRewardsGetUrl = "https://basicjavaclass.azurewebsites.net/api/students/rewards/";
+    const string RewardTypeGetUrl = "https://basicjavaclass.azurewebsites.net/api/students/rewards/types";
+
     public async Task<IEnumerable<Student>> GetStudents()
     {
         var client = new HttpClient();
@@ -51,7 +54,8 @@ class ClassRepository : IClassRepository
         System.Console.WriteLine("Update Attedence: id:{0} date:{1}", id, date);
 
         var client = new HttpClient();
-        var attendence = new Attendence{
+        var attendence = new Attendence
+        {
             Date = date.ToString("MMddyy"),
             Id = id,
             Name = name
@@ -68,18 +72,18 @@ class ClassRepository : IClassRepository
         {
             throw new System.Exception("Error:" + result.RequestMessage);
         }
-        
+
         await Task.FromResult(0);
-    }   
+    }
 
     public async Task<bool> IsClassRunningToday()
     {
-     
+
         var client = new HttpClient();
         var jsonData = await client.GetStringAsync(ClassesInfoUrl);
-        var classes =  JsonConvert.DeserializeObject<List<Class>>(jsonData);
+        var classes = JsonConvert.DeserializeObject<List<Class>>(jsonData);
 
-        foreach(var cls in classes)
+        foreach (var cls in classes)
         {
             System.Console.WriteLine(cls.Date + "->" + cls.Status);
         }
@@ -99,10 +103,10 @@ class ClassRepository : IClassRepository
     {
         var client = new HttpClient();
         var data = await client.GetStringAsync(AttendanceGetUrl + dt.ToString("MMddyy"));
-        var attendanceInfo =  JsonConvert.DeserializeObject<List<Attendence>>(data);
-        foreach(var attendance in attendanceInfo)
+        var attendanceInfo = JsonConvert.DeserializeObject<List<Attendence>>(data);
+        foreach (var attendance in attendanceInfo)
         {
-            System.Console.WriteLine("... attendance:id:{0} - {1}" , attendance.Id, attendance.Name);
+            System.Console.WriteLine("... attendance:id:{0} - {1}", attendance.Id, attendance.Name);
             //System.Console.WriteLine("... attendance:name" + attendance.Data == null ? "na" : attendance.Data.Name);
         }
 
@@ -113,18 +117,18 @@ class ClassRepository : IClassRepository
     {
         var client = new HttpClient();
         var jsonData = await client.GetStringAsync(ClassesInfoUrl);
-        var classes =  JsonConvert.DeserializeObject<List<Class>>(jsonData);
+        var classes = JsonConvert.DeserializeObject<List<Class>>(jsonData);
 
         List<Attendence> attendances = new List<Attendence>();
-        foreach(var cls in classes)
+        foreach (var cls in classes)
         {
             System.Console.WriteLine(cls.Date + "->" + cls.Status);
             client = new HttpClient();
             System.Console.WriteLine("Quering;:" + AttendanceGetUrl + cls.Date);
             var data = await client.GetStringAsync(AttendanceGetUrl + cls.Date);
-            var attendanceInfo =  JsonConvert.DeserializeObject<List<Attendence>>(data);
-            var studentAttendanceInfo = attendanceInfo.FirstOrDefault( a => a.Id == id);
-            if( studentAttendanceInfo != null)
+            var attendanceInfo = JsonConvert.DeserializeObject<List<Attendence>>(data);
+            var studentAttendanceInfo = attendanceInfo.FirstOrDefault(a => a.Id == id);
+            if (studentAttendanceInfo != null)
             {
                 studentAttendanceInfo.Date = cls.Date;
                 attendances.Add(studentAttendanceInfo);
@@ -139,5 +143,41 @@ class ClassRepository : IClassRepository
         var client = new HttpClient();
         var jsonData = await client.GetStringAsync(ClassesInfoUrl);
         return JsonConvert.DeserializeObject<List<Class>>(jsonData);
+    }
+
+    public async Task<IEnumerable<Reward>> GetRewards(string id)
+    {
+        var rewardTypes = await GetRewardTypes();
+        var client = new HttpClient();
+        var jsonData = await client.GetStringAsync(StudentRewardsGetUrl + id);
+        var exitingRewards = JsonConvert.DeserializeObject<List<Reward>>(jsonData);
+        var allRewards = new List<Reward>();
+
+        foreach(var rewardType in rewardTypes)
+        {
+            var foundReward = exitingRewards.FirstOrDefault( r=> r.TypeId == rewardType.Id);
+            if(foundReward != null)
+            {
+                foundReward.Description = rewardType.Description;
+                allRewards.Add(foundReward);
+            }
+            else{
+                var reward = new Reward(){
+                    TypeId = rewardType.Id,
+                    Description = rewardType.Description,
+                    Status = "not done"
+                };
+                allRewards.Add(reward);
+            }
+        }
+
+        return allRewards;
+    }
+
+    private async Task<IEnumerable<RewardType>> GetRewardTypes()
+    {
+        var client = new HttpClient();
+        var jsonData = await client.GetStringAsync(RewardTypeGetUrl);
+        return JsonConvert.DeserializeObject<List<RewardType>>(jsonData);
     }
 }
