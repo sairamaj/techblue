@@ -21,16 +21,24 @@ namespace web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await GetCurrentAttendances());
+            try
+            {
+                return View(await GetCurrentAttendances());
+            }
+            catch (TaskCanceledException te)
+            {
+                return View("TimeoutError");
+            }
+
         }
 
-         
+
         [HttpPost]
         public async Task<IActionResult> MarkAttendanceLastSession(string date)
         {
             System.Console.WriteLine("..... In MarkAttendanceLastSession :" + date);
             var id = GetClaimValue(ObjectIdentifier);
-            await _classRepository.UpdateAttendance(id, User.Identity.Name, DateTime.ParseExact(date,"MMddyy",null));
+            await _classRepository.UpdateAttendance(id, User.Identity.Name, DateTime.ParseExact(date, "MMddyy", null));
 
             return View("Index", await GetCurrentAttendances());
         }
@@ -57,13 +65,13 @@ namespace web.Controllers
 
         private string GetClaimValue(string claimType)
         {
-            foreach(var c in User.Claims)
+            foreach (var c in User.Claims)
             {
                 System.Console.WriteLine("{0} - {1}", c.Value, c.Type);
             }
 
             var claim = User.Claims.FirstOrDefault(c => c.Type == claimType);
-            if( claim == null)
+            if (claim == null)
             {
                 return null;
             }
@@ -74,12 +82,12 @@ namespace web.Controllers
         {
             var id = GetClaimValue(ObjectIdentifier);
             var attendances = await _classRepository.GetAttendance(id);
-            foreach(var attendance in attendances)
+            foreach (var attendance in attendances)
             {
-                System.Console.WriteLine("AttendanceController.index {0} ",attendance.Date);
+                System.Console.WriteLine("AttendanceController.index {0} ", attendance.Date);
             }
 
             return attendances;
         }
-    } 
+    }
 }

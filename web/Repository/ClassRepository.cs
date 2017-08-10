@@ -149,8 +149,14 @@ class ClassRepository : IClassRepository
     {
         var rewardTypes = await GetRewardTypes();
         var client = new HttpClient();
+        System.Console.WriteLine("Qyerying:" + StudentRewardsGetUrl + id);
         var jsonData = await client.GetStringAsync(StudentRewardsGetUrl + id);
         var exitingRewards = JsonConvert.DeserializeObject<List<Reward>>(jsonData);
+        foreach(var existingReward in exitingRewards)
+        {
+            System.Console.WriteLine("existing reward:" + existingReward.TypeId);
+        }
+
         var allRewards = new List<Reward>();
 
         foreach(var rewardType in rewardTypes)

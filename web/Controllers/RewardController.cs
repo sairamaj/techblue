@@ -21,8 +21,22 @@ namespace web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var rewards = await _classRepository.GetRewards(this.GetId());
-            return View( rewards);
+
+            try
+            {
+                var rewards = await _classRepository.GetRewards(this.GetId());
+                return View(rewards);
+            }
+            catch (TaskCanceledException te)
+            {
+                return View("TimeoutError");
+            }
+        }
+
+        [AllowAnonymous]
+        public IActionResult HowRewardsWork()
+        {
+            return View();
         }
     }
 }

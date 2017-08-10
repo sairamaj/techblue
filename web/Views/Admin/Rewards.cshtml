@@ -1,0 +1,48 @@
+@model IEnumerable<web.Models.Student>
+
+<table border="1" cellpadding="10">
+        <col width="520"/>
+        <col width="100"/>
+
+            @foreach(var student in Model.OrderBy(s=> s.Name)){
+                <tr>
+                    <td>@student.Name </td>
+                    <td>@student.Rewards.Where(r=> r.Status == "done").Count() reward(s)</td>
+                </tr>
+            }
+</table>
+
+<table>
+        @foreach(var student in Model.OrderBy(s=> s.Name)){
+            <tr>
+                <br/><br/>
+                <td><h3>@student.Name: @student.Rewards.Where(r=> r.Status == "done").Count() reward(s)</h3></td>
+<table border="1" cellpadding="10">
+        <col width="520"/>
+        <col width="800"/>
+    <tr>
+        <th>Task</th>
+        <th>Status</th>
+    </tr>
+    @foreach(var reward in @student.Rewards)
+    {
+        <tr>
+        <td>
+            @reward.Description
+        </td>
+            <b>
+            @if( @reward.Status == "done"){
+                    <td><font color="green">@reward.Status</font></td>
+            }
+            else{
+                    <td><font color="red">@reward.Status</font></td>
+            } 
+            </b>
+        </tr>
+
+    }
+</table>
+            </tr>
+        }
+
+</table>

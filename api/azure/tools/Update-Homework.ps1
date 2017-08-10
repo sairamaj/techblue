@@ -25,24 +25,25 @@
 
 }
 
-Write-Host "Getting Session notes reward types"
+Write-Host "Getting Homework reward types"
 $sessionNotesInfo = @{}
-foreach($sessionNotesType in (Invoke-RestMethod https://basicjavaclass.azurewebsites.net/api/students/rewards/types)  | where { $_.id -gt 200 -and $_.id -lt 300})
+foreach($sessionNotesType in (Invoke-RestMethod https://basicjavaclass.azurewebsites.net/api/students/rewards/types)  | where { $_.id -gt 300 -and $_.id -lt 400})
 {
-    $sessionNotesInfo[$sessionNotesType.id] = $sessionNotesType.extra.filename
-    
+    $sessionNotesInfo[$sessionNotesType.id] = $sessionNotesType.extra.directory
 }
+
+$sessionNotesInfo
 
 
 foreach($profile in (Invoke-Restmethod https://d4htq98825.execute-api.us-east-1.amazonaws.com/prod/students/profiles) )
 {
- #   $profile.id = '766e375f-360a-4945-904e-cb4aaac5d1e7'
-  #  $profile.giturl = "https://github.com/sairamaj/basicjava"
+  # $profile.id = '766e375f-360a-4945-904e-cb4aaac5d1e7'
+  # $profile.giturl = "https://github.com/sairamaj/basicjava"
 
     foreach($sessionNote in $sessionNotesInfo.GetEnumerator())
     {
         Write-host "Getting $($profile.GitUrl) for $($sessionNote.value)"
-        $file = "notes/$($sessionNote.value)"
+        $file = "$($sessionNote.value)/src/Application.java"
         $result = (Get-GithubContent -Url $profile.giturl -FileName $file )
         
         if( $result[0] -eq $false )
@@ -52,14 +53,7 @@ foreach($profile in (Invoke-Restmethod https://d4htq98825.execute-api.us-east-1.
         else
         {
             $content = $result[1]
-            if( $content.Length -le 200 )
-            {
-                $status = "$($sessionNote.value) is of size: $($content.Length). Should be minimum 200 characters."
-            }
-            else
-            {
-                $status = 'done'
-            }
+            $status = 'done'
         }
 
         $postedData = @{}
@@ -68,7 +62,7 @@ foreach($profile in (Invoke-Restmethod https://d4htq98825.execute-api.us-east-1.
         Write-Host "Updating $($profile.id) for status id:$($sessionNote.Key.ToString()) with $status"
         Invoke-RestMethod "https://basicjavaclass.azurewebsites.net/api/students/rewards/$($profile.id)" -Method Post -Body (ConvertTo-Json $postedData)
     }
-  # return
+   # return
 }
 
 return
