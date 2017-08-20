@@ -1,0 +1,25 @@
+@model IEnumerable<web.Models.Parent>
+
+<table border="1" cellpadding="10">
+            <col width="320"/>
+        <col width="300"/>
+        <col width="300"/>
+
+        @foreach(var parent in Model.OrderBy(p=> p.Name)){
+            <tr>
+                <td>@parent.Name</td>
+                <td>@parent.Email</td>
+                <td>
+                <table>
+                        @foreach(var student in parent.Students.OrderBy(s => s.Name)){
+                            <tr>
+                                <td>@student.Name</td>
+                            </tr>
+                        }
+                </table>
+            </td>
+            </tr>
+        }
+
+        <label font="bold">Total:<label>@Model.Count()
+</table>

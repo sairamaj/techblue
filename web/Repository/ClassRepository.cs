@@ -18,11 +18,19 @@ class ClassRepository : IClassRepository
     const string StudentRewardsGetUrl = "https://basicjavaclass.azurewebsites.net/api/students/rewards/";
     const string RewardTypeGetUrl = "https://basicjavaclass.azurewebsites.net/api/students/rewards/types";
 
+    const string ParentWithkidsUrl = "https://basicjavaclass.azurewebsites.net/api/parentwithkids";
     public async Task<IEnumerable<Student>> GetStudents()
     {
         var client = new HttpClient();
-        var jsonData = await client.GetStringAsync("https://basicjavaclass.azurewebsites.net/api/students");
+        var jsonData = await client.GetStringAsync("https://basicjavaclass.azurewebsites.net/api/groups/Students");
         return JsonConvert.DeserializeObject<List<Student>>(jsonData);
+    }
+
+    public async Task<IEnumerable<Parent>> GetParents()
+    {
+        var client = new HttpClient();
+        var jsonData = await client.GetStringAsync(ParentWithkidsUrl);
+        return JsonConvert.DeserializeObject<List<Parent>>(jsonData);
     }
 
     public async Task<Profile> GetProfile(string id)

@@ -16,13 +16,15 @@ namespace web
 {
     public class OpenIdConnectOptionsSetup : IConfigureOptions<OpenIdConnectOptions>
     {
-
-        public OpenIdConnectOptionsSetup(IOptions<AzureAdB2COptions> b2cOptions)
+        IClassRepository classRepository;
+        public OpenIdConnectOptionsSetup(IOptions<AzureAdB2COptions> b2cOptions, IClassRepository classRepository)
         {
             AzureAdB2COptions = b2cOptions.Value;
+            ClassRepository = classRepository;
         }
 
         public AzureAdB2COptions AzureAdB2COptions { get; set; }
+        public IClassRepository ClassRepository { get; set; }
 
         public void Configure(OpenIdConnectOptions options)
         {
@@ -43,7 +45,7 @@ namespace web
         public Task OnRedirectToIdentityProvider(RedirectContext context)
         {
             var defaultPolicy = AzureAdB2COptions.DefaultPolicy;
-            if (context.Properties.Items.TryGetValue(AzureAdB2COptions.PolicyAuthenticationProperty, out var policy) && 
+            if (context.Properties.Items.TryGetValue(AzureAdB2COptions.PolicyAuthenticationProperty, out var policy) &&
                 !policy.Equals(defaultPolicy))
             {
                 context.ProtocolMessage.Scope = OpenIdConnectScope.OpenIdProfile;
@@ -51,7 +53,8 @@ namespace web
                 context.ProtocolMessage.IssuerAddress = context.ProtocolMessage.IssuerAddress.ToLower().Replace(defaultPolicy.ToLower(), policy.ToLower());
                 context.Properties.Items.Remove(AzureAdB2COptions.PolicyAuthenticationProperty);
             }
-            else if (!string.IsNullOrEmpty(AzureAdB2COptions.ApiUrl)) {
+            else if (!string.IsNullOrEmpty(AzureAdB2COptions.ApiUrl))
+            {
                 context.ProtocolMessage.Scope += $" offline_access {AzureAdB2COptions.ApiScopes}";
                 context.ProtocolMessage.ResponseType = OpenIdConnectResponseType.CodeIdToken;
             }
@@ -82,13 +85,13 @@ namespace web
         public async Task OnAuthorizationCodeReceived(AuthorizationCodeReceivedContext context)
         {
             // Use MSAL to swap the code for an access token
-             // Extract the code from the response notification
+            // Extract the code from the response notification
             var code = context.ProtocolMessage.Code;
 
-            // foreach(var claim in context.Ticket.Principal.Claims)
-            // {
-            //     System.Console.WriteLine(claim.Type + "-->" + claim.Value);
-            // }
+            foreach (var claim in context.Ticket.Principal.Claims)
+            {
+                System.Console.WriteLine(claim.Type + "-->" + claim.Value);
+            }
 
             string signedInUserID = context.Ticket.Principal.FindFirst(ClaimTypes.NameIdentifier).Value;
             TokenCache userTokenCache = new MSALSessionCache(signedInUserID, context.HttpContext).GetMsalCacheInstance();
@@ -97,7 +100,7 @@ namespace web
             {
                 AuthenticationResult result = await cca.AcquireTokenByAuthorizationCodeAsync(code, AzureAdB2COptions.ApiScopes.Split(' '));
 
-                   
+
                 context.HandleCodeRedemption(result.AccessToken, result.IdToken);
             }
             catch (Exception ex)
@@ -114,12 +117,19 @@ namespace web
             Console.WriteLine("In SecurityTokenValidated....");
             var oidClaim = context.SecurityToken.Claims.FirstOrDefault(c => c.Type == "oid");
             System.Console.WriteLine("oidClaim is:" + oidClaim);
-            if( oidClaim.Value == "766e375f-360a-4945-904e-cb4aaac5d1e7")
+            if (oidClaim.Value == "766e375f-360a-4945-904e-cb4aaac5d1e7")
             {
                 // This is temporary. here we are going to query the Groups for this user and add accordingly.
-                ((ClaimsIdentity)context.Ticket.Principal.Identity).AddClaim(new Claim(ClaimTypes.Role, "Administrators", ClaimValueTypes.String));            
+                ((ClaimsIdentity)context.Ticket.Principal.Identity).AddClaim(new Claim(ClaimTypes.Role, "Administrators", ClaimValueTypes.String));
             }
             Console.WriteLine("Administrators claim has been added");
+
+
+            if( ClassRepository.GetParents().Result.FirstOrDefault(p=> p.Id == oidClaim.Value) != null)
+            {
+                Console.WriteLine("Parent claim has been added");
+                ((ClaimsIdentity)context.Ticket.Principal.Identity).AddClaim(new Claim(ClaimTypes.Role, "Parents", ClaimValueTypes.String));
+            }
 
             return Task.FromResult(0);
         }

@@ -4,6 +4,8 @@ using web.Models;
 public interface IClassRepository
 {
     Task<IEnumerable<Student>> GetStudents();   
+    Task<IEnumerable<Parent>> GetParents();   
+
     Task<Profile> GetProfile(string id);
     Task<Profile> UpdateProfile(string id, Profile profile);
     Task UpdateAttendance(string id, string name, System.DateTime date);

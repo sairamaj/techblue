@@ -5,7 +5,7 @@
         $FileName
     )
     $clientid = 'd55a0eb2eb441dd8f663'
-    $clientSecret = '############################'
+    $clientSecret = 'ZZZZZZZZZZZZZ'
     
 
     $parts = $Url -split '/'

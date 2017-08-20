@@ -42,6 +42,13 @@ namespace web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Parents()
+        {
+            var parents = await _classRepository.GetParents();
+            return View(parents);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Attendance()
         {
             var classes = await _classRepository.GetClasses();

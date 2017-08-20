@@ -39,6 +39,10 @@
                      <li><a asp-area="" asp-controller="Reward" asp-action="Index">Rewards</a></li> 
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    @if (User.IsInRole("Parents"))
+                    {
+                           <li><a asp-area="" asp-controller="Parent" asp-action="Index">Parent</a></li>
+                    }
                     @if (User.IsInRole("Administrators"))
                     {
                            <li><a asp-area="" asp-controller="Admin" asp-action="Index">Admin</a></li>

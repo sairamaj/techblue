@@ -15,8 +15,8 @@ Function Get-StudentId
 
 Function Dump-Students
 {
-    $url = 'https://basicjavaclass.azurewebsites.net/api/students'
-    Invoke-RestMethod -Uri $url
+    $url = 'https://basicjavaclass.azurewebsites.net/api/students' 
+    (Invoke-RestMethod -Uri $url) | sort name
 }
 
 Function Show-ClassDates
@@ -38,6 +38,7 @@ Write-Host 'Getting student id'
 $student = Get-StudentId -name $Name
 if( $student -eq $null ){
     Write-Error "$Name could not be found in student list."
+    Dump-Students
     return
 }
 
