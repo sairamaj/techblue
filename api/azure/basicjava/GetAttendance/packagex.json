@@ -1,0 +1,5 @@
+{
+    "dependencies": {
+        "fast-azure-storage" : "1.0.2"
+    }
+}

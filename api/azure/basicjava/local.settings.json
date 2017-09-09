@@ -1,0 +1,22 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "WEBSITE_SLOT_NAME": "Production",
+    "FUNCTIONS_EXTENSION_VERSION": "~1",
+    "ScmType": "None",
+    "AzureWebJobsSecretStorageType": "disabled",
+    "WEBSITE_AUTH_ENABLED": "False",
+    "REMOTEDEBUGGINGVERSION": "11.0.611103.400",
+    "BasicJavaClassStorageAccessKey": "SctwlMH2bXbOsTTV+IQ8fd1nkUYb7oDu2tc2Fu0zAZ6toywVZt8ClaM4VxKGpsB/J7fa7WYOC80m+R591fL76Q==",
+    "AzureWebJobsDashboard": "DefaultEndpointsProtocol=https;AccountName=basicjavaclass;AccountKey=SctwlMH2bXbOsTTV+IQ8fd1nkUYb7oDu2tc2Fu0zAZ6toywVZt8ClaM4VxKGpsB/J7fa7WYOC80m+R591fL76Q==",
+    "WEBSITE_NODE_DEFAULT_VERSION": "6.5.0",
+    "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "DefaultEndpointsProtocol=https;AccountName=basicjavaclass;AccountKey=SctwlMH2bXbOsTTV+IQ8fd1nkUYb7oDu2tc2Fu0zAZ6toywVZt8ClaM4VxKGpsB/J7fa7WYOC80m+R591fL76Q==",
+    "WEBSITE_CONTENTSHARE": "basicjavaclass9112",
+    "WEBSITE_AUTH_AUTO_AAD": "False",
+    "basicjavaclass_STORAGE": "DefaultEndpointsProtocol=https;AccountName=basicjavaclass;AccountKey=SctwlMH2bXbOsTTV+IQ8fd1nkUYb7oDu2tc2Fu0zAZ6toywVZt8ClaM4VxKGpsB/J7fa7WYOC80m+R591fL76Q==",
+    "WEBSITE_SITE_NAME": "basicjavaclass",
+    "WEBSITE_AUTH_LOGOUT_PATH": "/.auth/logout",
+    "AZURE_STORAGE_CONNECTION_STRING": "DefaultEndpointsProtocol=https;AccountName=basicjavaclass;AccountKey=SctwlMH2bXbOsTTV+IQ8fd1nkUYb7oDu2tc2Fu0zAZ6toywVZt8ClaM4VxKGpsB/J7fa7WYOC80m+R591fL76Q==;EndpointSuffix=core.windows.net",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=basicjavaclass;AccountKey=SctwlMH2bXbOsTTV+IQ8fd1nkUYb7oDu2tc2Fu0zAZ6toywVZt8ClaM4VxKGpsB/J7fa7WYOC80m+R591fL76Q=="
+  }
+}
