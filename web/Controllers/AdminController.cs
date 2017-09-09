@@ -75,6 +75,15 @@ namespace web.Controllers
             var students = await _classRepository.GetStudents();
             foreach (var student in students)
             {
+                var profile = await _classRepository.GetProfile(student.Id);
+                if (profile != null)
+                {
+                    student.GitUrl = profile.GitUrl;
+                }
+            }
+
+            foreach (var student in students)
+            {
                 student.Rewards = await _classRepository.GetRewards(student.Id);
             }
 
